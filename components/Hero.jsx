@@ -1,8 +1,38 @@
-import { readSingleton } from "@directus/sdk";
-import { directus } from "@/lib/directus";
+"use client";
 
-export default async function Hero() {
-  const heroStats = await directus.request(readSingleton("hero_stats"));
+import { useEffect, useState } from "react";
+
+const DIRECTUS_URL = "https://directus-production-8156.up.railway.app";
+
+export default function Hero() {
+  const [heroStats, setHeroStats] = useState({
+    teams_count: 15,
+    members_count: 150,
+    history_years: 56,
+  });
+
+  useEffect(() => {
+    async function fetchHeroStats() {
+      try {
+        const res = await fetch(
+          `${DIRECTUS_URL}/items/hero_stats?t=${Date.now()}`,
+          {
+            cache: "no-store",
+          }
+        );
+
+        const data = await res.json();
+
+        if (data.data) {
+          setHeroStats(data.data);
+        }
+      } catch (error) {
+        console.error("Erreur Directus hero :", error);
+      }
+    }
+
+    fetchHeroStats();
+  }, []);
 
   return (
     <section className="hero" id="accueil">
