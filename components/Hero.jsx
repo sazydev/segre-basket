@@ -1,4 +1,9 @@
-export default function Hero() {
+import { readSingleton } from "@directus/sdk";
+import { directus } from "@/lib/directus";
+
+export default async function Hero() {
+  const heroStats = await directus.request(readSingleton("hero_stats"));
+
   return (
     <section className="hero" id="accueil">
       <div className="hero-image-bg"></div>
@@ -30,17 +35,17 @@ export default function Hero() {
 
         <div className="hero-stats">
           <div>
-            <div className="hero-stat-num">15</div>
+            <div className="hero-stat-num">{heroStats.teams_count}</div>
             <div className="hero-stat-label">Équipes</div>
           </div>
 
           <div>
-            <div className="hero-stat-num">150</div>
+            <div className="hero-stat-num">{heroStats.members_count}</div>
             <div className="hero-stat-label">Licenciés</div>
           </div>
 
           <div>
-            <div className="hero-stat-num">56</div>
+            <div className="hero-stat-num">{heroStats.history_years}</div>
             <div className="hero-stat-label">Ans d&apos;histoire</div>
           </div>
         </div>
