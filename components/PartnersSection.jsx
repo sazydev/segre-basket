@@ -26,15 +26,13 @@ export default function PartnersSection() {
     async function fetchSponsors() {
       try {
         const res = await fetch(
-          `${DIRECTUS_URL}/items/parteners?sort=sort&limit=-1&fields=*,logo.*`,
+          `${DIRECTUS_URL}/items/parteners?sort=sort&limit=-1&fields=*,logo.*&t=${Date.now()}`,
           {
             cache: "no-store",
           }
         );
 
         const data = await res.json();
-
-        console.log("SPONSORS :", data);
 
         const formattedSponsors = (data.data || [])
           .map((sponsor) => ({
@@ -59,9 +57,7 @@ export default function PartnersSection() {
   if (loading) {
     return (
       <section className="partners-section" id="partenaires">
-        <div className="partners-label">
-          Chargement des partenaires...
-        </div>
+        <div className="partners-label">Chargement des partenaires...</div>
       </section>
     );
   }
@@ -88,8 +84,8 @@ export default function PartnersSection() {
             <a
               href={sponsor.link}
               className="sponsor-logo-card"
-              target="_blank"
-              rel="noopener noreferrer"
+              target={sponsor.link !== "#" ? "_blank" : undefined}
+              rel={sponsor.link !== "#" ? "noopener noreferrer" : undefined}
               key={`${sponsor.id}-${index}`}
               aria-label={sponsor.name}
             >

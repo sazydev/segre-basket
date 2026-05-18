@@ -22,7 +22,10 @@ export default function TrainingSection() {
     async function fetchTrainings() {
       try {
         const res = await fetch(
-          `${DIRECTUS_URL}/items/trainings?sort=sort&limit=-1`
+          `${DIRECTUS_URL}/items/trainings?sort=sort&limit=-1&t=${Date.now()}`,
+          {
+            cache: "no-store",
+          }
         );
 
         const data = await res.json();
@@ -99,6 +102,7 @@ export default function TrainingSection() {
               {day.sessions.map((session) => (
                 <div className="training-session" key={session.id}>
                   <div className="training-session-time">{session.time}</div>
+
                   <div className="training-session-category">
                     {session.category}
                   </div>

@@ -12,26 +12,38 @@ export default function TeamsSection() {
   useEffect(() => {
     async function fetchTeams() {
       try {
+        const timestamp = Date.now();
+
         const [teamsRes, playersRes] = await Promise.all([
-          fetch(`${DIRECTUS_URL}/items/teams?sort=sort&limit=-1`),
-          fetch(`${DIRECTUS_URL}/items/players?sort=sort&limit=-1`),
+          fetch(
+            `${DIRECTUS_URL}/items/teams?sort=sort&limit=-1&t=${timestamp}`,
+            { cache: "no-store" }
+          ),
+          fetch(
+            `${DIRECTUS_URL}/items/players?sort=sort&limit=-1&t=${timestamp}`,
+            { cache: "no-store" }
+          ),
         ]);
 
         const teamsData = await teamsRes.json();
         const playersData = await playersRes.json();
 
-        const formattedTeams = teamsData.data.map((team) => {
-          const teamPlayers = playersData.data.filter(
+        const formattedTeams = (teamsData.data || []).map((team) => {
+          const teamPlayers = (playersData.data || []).filter(
             (player) => player.team === team.id
           );
 
           const players = teamPlayers
             .filter((player) => player.role === "joueur")
-            .map((player) => `${player.firstname} ${player.lastname}`);
+            .map((player) =>
+              `${player.firstname || ""} ${player.lastname || ""}`.trim()
+            );
 
           const coaches = teamPlayers
             .filter((player) => player.role === "coach")
-            .map((player) => `${player.firstname} ${player.lastname}`);
+            .map((player) =>
+              `${player.firstname || ""} ${player.lastname || ""}`.trim()
+            );
 
           return {
             id: team.id,
@@ -46,6 +58,7 @@ export default function TeamsSection() {
         });
 
         setTeams(formattedTeams);
+        setActiveTeamIndex(0);
       } catch (error) {
         console.error("Erreur Directus équipes :", error);
       } finally {
@@ -72,7 +85,7 @@ export default function TeamsSection() {
     );
   }
 
-  const activeTeam = teams[activeTeamIndex];
+  const activeTeam = teams[activeTeamIndex] || teams[0];
 
   return (
     <section className="teams-section" id="equipes">
@@ -130,8 +143,8 @@ export default function TeamsSection() {
 
               <div className="players-grid">
                 {activeTeam.players.length > 0 ? (
-                  activeTeam.players.map((player) => (
-                    <div className="player-card" key={player}>
+                  activeTeam.players.map((player, index) => (
+                    <div className="player-card" key={`${player}-${index}`}>
                       {player}
                     </div>
                   ))
@@ -146,8 +159,8 @@ export default function TeamsSection() {
 
               {activeTeam.coaches.length > 0 ? (
                 <div className="coaches-list">
-                  {activeTeam.coaches.map((coach) => (
-                    <div className="coach-card" key={coach}>
+                  {activeTeam.coaches.map((coach, index) => (
+                    <div className="coach-card" key={`${coach}-${index}`}>
                       {coach}
                     </div>
                   ))}

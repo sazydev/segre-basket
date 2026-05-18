@@ -12,22 +12,27 @@ export default function GallerySection() {
     async function fetchGallery() {
       try {
         const res = await fetch(
-          `${DIRECTUS_URL}/items/gallery?sort=sort&limit=-1`
+          `${DIRECTUS_URL}/items/gallery?sort=sort&limit=-1&t=${Date.now()}`,
+          {
+            cache: "no-store",
+          }
         );
 
         const data = await res.json();
 
-        const formattedPhotos = (data.data || []).map((photo, index) => ({
-          id: photo.id,
-          src: `${DIRECTUS_URL}/assets/${photo.image}`,
-          alt: photo.title || "Photo du club Segré Basket",
-          className:
-            index === 0
-              ? "gallery-main"
-              : index === 3 || index === 4
-              ? "gallery-wide"
-              : "gallery-small",
-        }));
+        const formattedPhotos = (data.data || [])
+          .filter((photo) => photo.image)
+          .map((photo, index) => ({
+            id: photo.id,
+            src: `${DIRECTUS_URL}/assets/${photo.image}`,
+            alt: photo.title || "Photo du club Segré Basket",
+            className:
+              index === 0
+                ? "gallery-main"
+                : index === 3 || index === 4
+                ? "gallery-wide"
+                : "gallery-small",
+          }));
 
         setPhotos(formattedPhotos);
       } catch (error) {

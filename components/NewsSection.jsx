@@ -29,8 +29,10 @@ export default function NewsSection() {
     async function fetchNews() {
       try {
         const res = await fetch(
-          `${DIRECTUS_URL}/items/news?sort=sort&limit=-1&fields=*`,
-          { cache: "no-store" }
+          `${DIRECTUS_URL}/items/news?sort=sort&limit=-1&fields=*&t=${Date.now()}`,
+          {
+            cache: "no-store",
+          }
         );
 
         const data = await res.json();
