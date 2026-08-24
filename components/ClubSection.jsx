@@ -1,42 +1,10 @@
-"use client";
-
-import { useEffect, useState } from "react";
-
-const DIRECTUS_URL = "https://directus-production-8156.up.railway.app";
-
 export default function ClubSection() {
-  const [clubInfo, setClubInfo] = useState({
-    accent_number: "2026",
-    accent_label: "En compétition",
-  });
-
-  useEffect(() => {
-    async function fetchClubInfo() {
-      try {
-        const res = await fetch(
-          `${DIRECTUS_URL}/items/club_info?t=${Date.now()}`,
-          {
-            cache: "no-store",
-          }
-        );
-
-        const data = await res.json();
-
-        if (data.data) {
-          setClubInfo(data.data);
-        }
-      } catch (error) {
-        console.error("Erreur Directus club_info :", error);
-      }
-    }
-
-    fetchClubInfo();
-  }, []);
-
   return (
     <section className="club-section" id="club">
       <div className="club-grid">
+
         <div className="club-visual">
+
           <div className="club-image-frame">
             <img
               src="/assets/img/heroimg.jpg"
@@ -48,9 +16,10 @@ export default function ClubSection() {
           </div>
 
           <div className="club-accent-box">
-            <div className="num">{clubInfo.accent_number}</div>
-            <div className="lab">{clubInfo.accent_label}</div>
+            <div className="num">2026</div>
+            <div className="lab">En compétition</div>
           </div>
+
         </div>
 
         <div>
@@ -88,10 +57,15 @@ export default function ClubSection() {
           </p>
 
           <div className="club-values">
+
             <div className="value-card">
               <span className="value-number">01</span>
+
               <div>
-                <div className="value-title">Progresser ensemble</div>
+                <div className="value-title">
+                  Progresser ensemble
+                </div>
+
                 <div className="value-desc">
                   Des entraînements pensés pour faire évoluer chaque joueur,
                   peu importe son niveau.
@@ -101,8 +75,12 @@ export default function ClubSection() {
 
             <div className="value-card">
               <span className="value-number">02</span>
+
               <div>
-                <div className="value-title">Un vrai esprit d&apos;équipe</div>
+                <div className="value-title">
+                  Un vrai esprit d&apos;équipe
+                </div>
+
                 <div className="value-desc">
                   Sur le terrain comme en dehors, le collectif passe toujours avant le reste.
                 </div>
@@ -111,8 +89,12 @@ export default function ClubSection() {
 
             <div className="value-card">
               <span className="value-number">03</span>
+
               <div>
-                <div className="value-title">Former les jeunes</div>
+                <div className="value-title">
+                  Former les jeunes
+                </div>
+
                 <div className="value-desc">
                   Le club accompagne les plus jeunes avec des coachs présents,
                   sérieux et investis.
@@ -122,16 +104,22 @@ export default function ClubSection() {
 
             <div className="value-card">
               <span className="value-number">04</span>
+
               <div>
-                <div className="value-title">Vivre le basket</div>
+                <div className="value-title">
+                  Vivre le basket
+                </div>
+
                 <div className="value-desc">
                   Matchs, tournois, moments partagés : le club avance avec ses joueurs
                   et bénévoles.
                 </div>
               </div>
             </div>
+
           </div>
         </div>
+
       </div>
     </section>
   );

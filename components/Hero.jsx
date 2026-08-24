@@ -1,39 +1,4 @@
-"use client";
-
-import { useEffect, useState } from "react";
-
-const DIRECTUS_URL = "https://directus-production-8156.up.railway.app";
-
 export default function Hero() {
-  const [heroStats, setHeroStats] = useState({
-    teams_count: 15,
-    members_count: 150,
-    history_years: 56,
-  });
-
-  useEffect(() => {
-    async function fetchHeroStats() {
-      try {
-        const res = await fetch(
-          `${DIRECTUS_URL}/items/hero_stats?t=${Date.now()}`,
-          {
-            cache: "no-store",
-          }
-        );
-
-        const data = await res.json();
-
-        if (data.data) {
-          setHeroStats(data.data);
-        }
-      } catch (error) {
-        console.error("Erreur Directus hero :", error);
-      }
-    }
-
-    fetchHeroStats();
-  }, []);
-
   return (
     <section className="hero" id="accueil">
       <div className="hero-image-bg"></div>
@@ -65,17 +30,17 @@ export default function Hero() {
 
         <div className="hero-stats">
           <div>
-            <div className="hero-stat-num">{heroStats.teams_count}</div>
+            <div className="hero-stat-num">15</div>
             <div className="hero-stat-label">Équipes</div>
           </div>
 
           <div>
-            <div className="hero-stat-num">{heroStats.members_count}</div>
+            <div className="hero-stat-num">150</div>
             <div className="hero-stat-label">Licenciés</div>
           </div>
 
           <div>
-            <div className="hero-stat-num">{heroStats.history_years}</div>
+            <div className="hero-stat-num">56</div>
             <div className="hero-stat-label">Ans d&apos;histoire</div>
           </div>
         </div>

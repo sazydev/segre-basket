@@ -1,77 +1,52 @@
-"use client";
-
-import { useEffect, useState } from "react";
-
-const DIRECTUS_URL = "https://directus-production-8156.up.railway.app";
-
-function getLogoUrl(logo) {
-  if (!logo) return null;
-
-  if (typeof logo === "string") {
-    return `${DIRECTUS_URL}/assets/${logo}`;
-  }
-
-  if (logo.id) {
-    return `${DIRECTUS_URL}/assets/${logo.id}`;
-  }
-
-  return null;
-}
+const sponsors = [
+  {
+    name: "Chesneau",
+    logo: "/assets/sponsors/chesneau.png",
+    link: "https://www.auto-chesneau.com/accueil",
+  },
+  {
+    name: "La Colonnade",
+    logo: "/assets/sponsors/colonnade.png",
+    link: "https://www.la-colonnade.com/",
+  },
+  {
+    name: "Crédit Mutuel",
+    logo: "/assets/sponsors/creditmutuel.png",
+    link: "https://www.creditmutuel.fr/fr/caisses-et-distributeurs/ResultatsRechercheGeographique.aspx?inseeCode=49331",
+  },
+  {
+    name: "Eiffage",
+    logo: "/assets/sponsors/eiffage.png",
+    link: "https://www.eiffage.com/",
+  },
+  {
+    name: "L'Équip",
+    logo: "/assets/sponsors/equipe.png",
+    link: "https://www.lequip49.fr/",
+  },
+  {
+    name: "Foliard",
+    logo: "/assets/sponsors/foliard.jpg",
+    link: "https://www.foliard.fr/",
+  },
+  {
+    name: "LAD",
+    logo: "/assets/sponsors/lad.jpg",
+    link: "https://www.facebook.com/lad49/?locale=fr_FR",
+  },
+  {
+    name: "E.Leclerc Segré",
+    logo: "/assets/sponsors/leclerc.png",
+    link: "https://www.e.leclerc/mag/e-leclerc-segre",
+  },
+  {
+    name: "MMA",
+    logo: "/assets/sponsors/mma.jpg",
+    link: "https://agence.mma.fr/segre-en-anjou-bleu/",
+  },
+];
 
 export default function PartnersSection() {
-  const [sponsors, setSponsors] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchSponsors() {
-      try {
-        const res = await fetch(
-          `${DIRECTUS_URL}/items/parteners?sort=sort&limit=-1&fields=*,logo.*&t=${Date.now()}`,
-          {
-            cache: "no-store",
-          }
-        );
-
-        const data = await res.json();
-
-        const formattedSponsors = (data.data || [])
-          .map((sponsor) => ({
-            id: sponsor.id,
-            name: sponsor.name,
-            logo: getLogoUrl(sponsor.logo),
-            link: sponsor.website_url || "#",
-          }))
-          .filter((sponsor) => sponsor.logo);
-
-        setSponsors(formattedSponsors);
-      } catch (error) {
-        console.error("Erreur Directus partenaires :", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchSponsors();
-  }, []);
-
-  if (loading) {
-    return (
-      <section className="partners-section" id="partenaires">
-        <div className="partners-label">Chargement des partenaires...</div>
-      </section>
-    );
-  }
-
-  if (!sponsors.length) {
-    return (
-      <section className="partners-section" id="partenaires">
-        <div className="partners-label">
-          Aucun partenaire ajouté pour le moment.
-        </div>
-      </section>
-    );
-  }
-
   const duplicatedSponsors = [...sponsors, ...sponsors];
 
   return (
@@ -84,9 +59,9 @@ export default function PartnersSection() {
             <a
               href={sponsor.link}
               className="sponsor-logo-card"
-              target={sponsor.link !== "#" ? "_blank" : undefined}
-              rel={sponsor.link !== "#" ? "noopener noreferrer" : undefined}
-              key={`${sponsor.id}-${index}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              key={`${sponsor.name}-${index}`}
               aria-label={sponsor.name}
             >
               <img src={sponsor.logo} alt={sponsor.name} />
